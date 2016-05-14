@@ -1,0 +1,201 @@
+<div id="devicePrimaryInfoContainer" class="panel panel-primary line-height-big">
+	<div class="panel-heading">
+		<h3 class="panel-title">Device Primary Info</h3>
+	</div>
+	<div class="panel-body">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-3">
+					<span>Username: <span>
+					<span>
+						<% if @user_info['username'].nil? %>
+						Not Got Yet
+						<% else %>
+						<%= @user_info['username'] %>
+						<% end %>
+					</span>
+				</div>
+				<div class="col-sm-3">
+					<span>Status: <span>
+					<span>
+						<% if @user_info['online'] %>
+						Online
+						<% else %>
+						Offline
+						<% end%>						
+					</span>
+				</div>
+				<div class="col-sm-3">
+					<span>Locale: </span>
+					<span>
+						<% if @device_info['locale'].nil? %>
+						Not Got Yet
+						<% else %>
+						<%= @device_info['locale'] %>
+						<% end %>
+					</span>					
+				</div>
+				<div class="col-sm-3">
+					<span>Timezone: </span>
+					<span>To Be Implemented</span>
+				</div>
+				<div class="col-sm-3">
+					<span>Manufacturer: </span>
+					<span>
+						<% if @device_info['manufacturer'].nil? %>
+						Not Got Yet
+						<% else %>
+						<%= @device_info['manufacturer'] %>
+						<% end %>
+					</span>	
+				</div>
+				<div class="col-sm-3">
+					<span>OS: </span>
+					<span>
+						<% if @device_info['os'].nil? %>
+						Not Got Yet
+						<% else %>
+						<%= @device_info['os'] %>
+						<% end %>
+					</span>
+				</div>			
+				<div class="col-sm-3">
+					<span>App Version: </span>
+					<span>
+						<% if @device_info['app_version'].nil? %>
+						Not Got Yet
+						<% else %>
+						<%= @device_info['app_version'] %>
+						<% end %>
+					</span>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="deviceExtraInfoContainer" class="panel panel-primary line-height-big">
+	<div class="panel-heading">
+		<h3 class="panel-title">Device Extra Info</h3>
+	</div>
+	<div class="panel-body">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-4">
+					<span>Network Environment: <span>
+					<span>
+						<% if @device_info['network_type'].nil? %>
+						Not Got Yet
+						<% else %>
+						<%= @device_info['network_type'] %>
+						<% end %>
+					</span>
+				</div>
+				<div class="col-sm-12">
+					<span>Battery Info: <span>
+					<span>
+						Remaining <%= @battery_remaining %>
+					</span>
+					<span>, Power Source <%= @battery_source %></span>
+					<span>, Consume Rate <%= @battery_consume_rate %></span>
+				</div>
+				<div class="col-sm-6">
+					<span>Data Cost In Wi-Fi Mode: </span><span>Unknown</span>
+				</div>
+				<div class="col-sm-6">
+					<span>Data Cost In Roaming Mode: </span><span>Unknown</span>
+				</div>
+				<div class="col-sm-6">
+					<span>CPU Usage: </span><span>Unknown</span>
+				</div>
+				<div class="col-sm-6">
+					<span>Memory Usage: </span><span>Unknown</span>
+				</div>			
+				<div class="col-sm-6">
+					<span>Storage Usage: </span><span>Unknown</span>
+				</div>
+				<div class="col-sm-6">
+					<span>Updated at: </span>
+					<span>
+						<% if @device_info['fetched_at'].nil? %>
+						Never updated
+						<% else %>
+						<%= @device_info['fetched_at'] %>
+						<% end %>
+					</span>
+				</div>
+				<div class="col-sm-12">
+					<hr />
+				</div>
+				<div class="col-sm-12">
+					<button class="btn btn-primary btn-fetch-new-info" data-id="<%= @id %>">Fetch New Info</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="deviceConfigurationContainer" class="panel panel-primary line-height-big">
+	<div class="panel-heading">
+		<h3 class="panel-title">Device Configuration</h3>
+	</div>
+	<div class="panel-body">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-5">
+					<span>Current Log Level: <span>
+					<% if @device_info['log_level'].nil? %>
+					<input type="text" name="log_level" value="" placeholder="Not Got Yet" />
+					<% else %>
+					<input type="text" name="log_level" value="<%= @device_info['log_level'] %>" />
+					<% end %>
+				</div>
+				<div class="col-sm-5">
+					<span>Log Sent Freq(in seconds): <span>
+					<% if @device_info['log_sent_freq'].nil? %>
+					<input type="text" name="log_sent_freq" value="" placeholder="Not Got Yet" />
+					<% else %>
+					<input type="text" name="log_sent_freq" value="<%= @device_info['log_sent_freq'] %>" />
+					<% end %>
+				</div>
+				<div class="col-sm-2">
+					<button class="btn btn-primary btn-configure-logger" data-id="<%= @id %>">Configure Logger</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="deviceLogContainer" class="panel panel-primary container-log">
+	<div class="panel-heading">
+		<h3 class="panel-title">Device Log</h3>
+	</div>
+	<div class="panel-body">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-12">
+					<button class="btn btn-primary btn-fetch-logs" data-id="<%= @id %>">Fetch Log</button>
+				</div>
+				<div class="col-sm-12">
+					<hr />
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<% @logs.each do |log| %>
+			<div class="row">
+				<div class="col-sm-2">
+					<%= log[:name] %>
+				</div>
+				<div class="col-sm-8">
+					<span>modified at <%= log[:mtime] %></span>
+					<span>, size <%= log[:size] %></span>
+				</div>
+				<div class="col-sm-2">
+					<%= link_to 'Download', device_download_log_path(:id => @id, :file => log[:name]) %>
+				</div>						
+			</div>
+			<% end %>
+		</div>
+	</div>
+</div>

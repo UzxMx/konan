@@ -1,0 +1,133 @@
+<div class="panel panel-default">
+	<div class="panel-heading container-fluid">
+		<div class="row">
+			<div class="col-sm-4">
+				<span><%= @online_count %> online</span>
+				<span><%= @total_count - @online_count %> offline</span>
+			</div>
+
+			<div class="col-sm-8 text-right">
+				<div class="dropdown inline-block">
+					<button class="btn btn-default dropdown-toggle" type="button" id="statusDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						<% if @show_online.nil? %>
+						All Status
+						<% elsif @show_online %>
+						Online
+						<% else %>
+						Offline
+						<% end %>
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><%= link_to 'Online', devices_path(:online => 'true') %></li>
+						<li><%= link_to 'Offline', devices_path(:online => 'false') %></li>
+						<li><%= link_to 'All Status', devices_path %></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<ul id="deviceList" class="list-group line-height-big">
+		<% @devices.each do |device| %>
+		<% user = device['user'] %>
+		<% extra_info = device['device'] %>
+		<li class="list-group-item">
+			<%= link_to device_path(:id => user['id']), :class => 'default-style' do %>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-sm-3">
+							<span>Username: <span>
+							<span>
+								<% if user['username'].nil? %>
+								Not Got Yet
+								<% else %>
+								<%= user['username'] %>
+								<% end %>
+							</span>
+						</div>
+						<div class="col-sm-3">
+							<span>Status: <span>
+							<span>
+								<% if user['online'] %>
+								Online
+								<% else %>
+								Offline
+								<% end%>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-sm-3">
+							<span>Locale: </span>
+							<span>
+								<% if extra_info.nil? %>
+								Not Got Yet
+								<% else %>
+								<%= extra_info['locale'] %>
+								<% end %>
+							</span>
+						</div>
+						<div class="col-sm-3">
+							<span>OS: </span>
+							<span>
+								<% if extra_info.nil? %>
+								Not Got Yet
+								<% else %>
+								<%= extra_info['os'] %>
+								<% end %>
+							</span>
+						</div>
+					</div>
+				</div>
+			<% end%>
+		</li>
+		<% end %>
+	</ul>
+</div>
+
+<div class="container-pagination text-center">
+	<nav>
+		<ul class="pagination">
+
+			<% if @current_page == 1 %>
+			<li class="disabled">
+				<a href="#" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+			<% else %>
+			<li>
+				<%= link_to devices_path(:page => @current_page - 1) do %>
+					<span aria-hidden="true">&laquo;</span>
+				<% end %>
+			</li>
+			<% end %>
+
+			<% for i in @page_start..@page_end %>
+				<% if i == @current_page %>
+				<li class="active"><a href="#"><%= i %></a></li>
+				<% else %>
+				<li><%= link_to i, devices_path(:page => i) %></li>
+				<% end %>
+			<% end %>
+
+			<% if @current_page == @page_num %>
+			<li class="disabled">
+				<a href="#" aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+			<% else %>
+			<li>
+				<%= link_to devices_path(:page => @current_page + 1) do %>
+					<span aria-hidden="true">&raquo;</span>
+				<% end %>
+			</li>
+			<% end %>
+
+		</ul>
+	</nav>
+</div>
